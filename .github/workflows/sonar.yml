@@ -24,6 +24,11 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
 
+    - name: Debug GKE Cluster Context
+      run: |
+        gcloud config list
+        gcloud container clusters list
+
     - name: Install Helm
       run: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
@@ -35,6 +40,6 @@ jobs:
         gcloud components update
         gcloud container clusters get-credentials reference-baton-426923-t0-gke --region us-east5 --project reference-baton-426923-t0
         helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
-        helm template sonarqube sonarqube/sonarqube > ./sonarqube.yaml  -n sonarqube
+        helm template sonarqube sonarqube/sonarqube > ./sonarqube.yaml -n sonarqube
         ls
-        kubectl delete -f sonarqube.yaml -n sonarqube
+        kubectl apply -f sonarqube.yaml -n sonarqube
